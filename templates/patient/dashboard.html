@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-3"><i class="fas fa-home"></i> Welcome, {{ patient.full_name }}</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text mb-0">Upcoming Appointments</p>
+                        <h3 class="mb-0">{{ upcoming_appointments|length }}</h3>
+                    </div>
+                    <i class="fas fa-calendar fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text mb-0">Available Doctors</p>
+                        <h3 class="mb-0">{{ available_doctors|length }}</h3>
+                    </div>
+                    <i class="fas fa-stethoscope fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text mb-0">Departments</p>
+                        <h3 class="mb-0">{{ departments|length }}</h3>
+                    </div>
+                    <i class="fas fa-hospital fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-check"></i> Upcoming Appointments</h5>
+            </div>
+            <div class="card-body">
+                {% if upcoming_appointments %}
+                <div class="list-group">
+                    {% for apt in upcoming_appointments %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">Dr. {{ apt.doctor.full_name }}</h6>
+                                <p class="mb-1 text-muted small">{{ apt.doctor.department.name }}</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-calendar"></i> {{ apt.appointment_date.strftime('%Y-%m-%d %H:%M')
+                                    }}
+                                </p>
+                            </div>
+                            <span class="badge bg-info">{{ apt.status }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No upcoming appointments</p>
+                <a href="{{ url_for('book_appointment') }}" class="btn btn-sm btn-primary">Book Now</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-filter"></i> Departments</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for dept in departments %}
+                    <a href="{{ url_for('department_details', department_id=dept.id) }}"
+                        class="list-group-item list-group-item-action">
+                        <h6 class="mb-1">{{ dept.name }}</h6>
+                        <small class="text-muted">{{ dept.description }}</small>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

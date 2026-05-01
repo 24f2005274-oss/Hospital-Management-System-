@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ department.name }} - Department Details{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('patient_dashboard') }}" class="btn btn-outline-secondary mb-3">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    <h1 class="mb-3"><i class="fas fa-hospital-user"></i> {{ department.name }}</h1>
+    <p class="lead text-muted">{{ department.description }}</p>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-user-md"></i> Doctors in this Department</h5>
+    </div>
+    <div class="card-body">
+        {% if doctors %}
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-light rounded-circle p-3 me-3">
+                                <i class="fas fa-user-md fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">{{ doctor.full_name }}</h5>
+                                <p class="card-text text-muted small mb-0">{{ doctor.specialization }}</p>
+                            </div>
+                        </div>
+                        <p class="card-text small mb-2">
+                            <strong>Qualification:</strong> {{ doctor.qualification }}<br>
+                            <strong>Experience:</strong> {{ doctor.experience_years }} years
+                        </p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('doctor_profile', doctor_id=doctor.id) }}"
+                                class="btn btn-outline-primary">
+                                View Profile
+                            </a>
+                            <a href="{{ url_for('book_appointment', department=department.id) }}"
+                                class="btn btn-primary">
+                                Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No doctors found in this department.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

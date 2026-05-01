@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-3"><i class="fas fa-calendar-check"></i> My Appointments</h1>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apt in appointments %}
+                    <tr>
+                        <td>Dr. {{ apt.doctor.full_name }}</td>
+                        <td>{{ apt.doctor.department.name }}</td>
+                        <td>{{ apt.appointment_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ apt.appointment_time.strftime('%H:%M') }}</td>
+                        <td>
+                            {% if apt.status == 'Booked' %}
+                            <span class="badge bg-info">Booked</span>
+                            {% elif apt.status == 'Completed' %}
+                            <span class="badge bg-success">Completed</span>
+                            {% else %}
+                            <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if apt.status == 'Booked' %}
+                            <form method="POST" action="{{ url_for('cancel_appointment', appointment_id=apt.id) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this appointment?')">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </form>
+                            {% elif apt.status == 'Completed' %}
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#treatmentModal{{ apt.id }}">
+                                <i class="fas fa-file-medical"></i> View Treatment
+                            </button>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% if apt.status == 'Completed' and apt.treatment %}
+                    <div class="modal fade" id="treatmentModal{{ apt.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Treatment Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Doctor:</strong> Dr. {{ apt.doctor.full_name }}</p>
+                                    <p><strong>Date:</strong> {{ apt.appointment_date.strftime('%Y-%m-%d') }}</p>
+
+                                    <hr>
+
+                                    <h6>Diagnosis</h6>
+                                    <p>{{ apt.treatment.diagnosis }}</p>
+
+                                    <h6>Prescription</h6>
+                                    <p>{{ apt.treatment.prescription or 'N/A' }}</p>
+
+                                    <h6>Doctor Notes</h6>
+                                    <p>{{ apt.treatment.notes or 'N/A' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted mb-3">No appointments yet</p>
+            <a href="{{ url_for('book_appointment') }}" class="btn btn-primary">
+                <i class="fas fa-calendar-plus"></i> Book Your First Appointment
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

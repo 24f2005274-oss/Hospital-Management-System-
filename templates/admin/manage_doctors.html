@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Doctors{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-3"><i class="fas fa-stethoscope"></i> Manage Doctors</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow border-dark">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h5 class="mb-0">Add a new Doctor</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="action" value="add">
+
+                    <div class="border border-dark rounded-4 p-4 mb-3">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Fullname</label>
+                            <input type="text" class="form-control border-dark rounded-3" name="full_name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Specialization/Department</label>
+                            <!-- Combining specialization and department for visual match, but keeping logic separate -->
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control border-dark rounded-3" name="specialization"
+                                        placeholder="Specialization">
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control border-dark rounded-3" name="department_id" required>
+                                        <option value="">Department</option>
+                                        {% for dept in departments %}
+                                        <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted">experience(years)</label>
+                            <input type="number" class="form-control border-dark rounded-3" name="experience_years">
+                        </div>
+
+                        <!-- Hidden/Additional fields required by backend but not in wireframe main view -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Username</label>
+                            <input type="text" class="form-control border-dark rounded-3" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Email</label>
+                            <input type="email" class="form-control border-dark rounded-3" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Password</label>
+                            <input type="password" class="form-control border-dark rounded-3" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">License Number</label>
+                            <input type="text" class="form-control border-dark rounded-3" name="license_number"
+                                required>
+                        </div>
+
+                        <div class="text-center my-2">
+                            <strong>I</strong><br>
+                            <strong>I</strong>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-outline-success px-4 rounded-3">create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Registered Doctors ({{ doctors|length }})</h5>
+            </div>
+            <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                {% if doctors %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>License</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doctor in doctors %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-initial rounded-circle bg-primary text-white me-2 d-flex justify-content-center align-items-center"
+                                            style="width: 40px; height: 40px;">
+                                            {{ doctor.full_name[0] | upper }}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">{{ doctor.full_name }}</h6>
+                                            <small class="text-muted">{{ doctor.specialization or 'General' }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-light text-dark border">{{ doctor.department.name }}</span>
+                                </td>
+                                <td><small class="font-monospace">{{ doctor.license_number }}</small></td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="modal" data-bs-target="#editDoctorModal{{ doctor.id }}"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form method="POST" style="display: inline;"
+                                            onsubmit="return confirm('Delete this doctor?');">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Edit Doctor Modal -->
+                {% for doctor in doctors %}
+                <div class="modal fade" id="editDoctorModal{{ doctor.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Doctor</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    <input type="hidden" name="action" value="edit">
+                                    <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" name="full_name"
+                                            value="{{ doctor.full_name }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Department</label>
+                                        <select class="form-control" name="department_id" required>
+                                            {% for dept in departments %}
+                                            <option value="{{ dept.id }}" {% if doctor.department_id==dept.id
+                                                %}selected{% endif %}>{{ dept.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Specialization</label>
+                                        <input type="text" class="form-control" name="specialization"
+                                            value="{{ doctor.specialization }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Qualification</label>
+                                        <input type="text" class="form-control" name="qualification"
+                                            value="{{ doctor.qualification }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Experience (Years)</label>
+                                        <input type="number" class="form-control" name="experience_years"
+                                            value="{{ doctor.experience_years }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" name="phone" value="{{ doctor.phone }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">License Number</label>
+                                        <input type="text" class="form-control" name="license_number"
+                                            value="{{ doctor.license_number }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Bio</label>
+                                        <textarea class="form-control" name="bio"
+                                            rows="3">{{ doctor.bio or '' }}</textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted text-center py-3">No doctors added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

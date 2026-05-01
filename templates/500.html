@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center h-full pt-32 text-center">
+    <div class="text-red-500 text-7xl mb-4">
+        <i class="ph-fill ph-warning-octagon"></i>
+    </div>
+    <h1 class="text-5xl font-bold text-white tracking-tight mb-2">500</h1>
+    <p class="text-xl text-gray-400 mb-8">Critical system failure. Engineers have been notified.</p>
+    <a href="{{ url_for('index') }}" class="bg-brand-600 hover:bg-brand-500 text-white px-6 py-2 rounded-md font-medium transition-colors shadow-sm">
+        Reboot Console
+    </a>
+</div>
+{% endblock %}

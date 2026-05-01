@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h4 class="mb-0">Welcome Admin</h4>
+                </div>
+                <div class="col-md-8">
+                    <form action="{{ url_for('admin_dashboard') }}" method="get" class="d-flex">
+                        <input type="text" name="search" class="form-control me-2"
+                            placeholder="doctor, patient, department.." value="{{ search_query }}">
+                        <button type="submit" class="btn btn-outline-primary">search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registered Doctors -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Registered Doctors</h5>
+            <a href="{{ url_for('manage_doctors') }}" class="btn btn-outline-success">create</a>
+        </div>
+        <div class="card-body">
+            {% for doctor in doctors %}
+            <div class="card mb-2 border">
+                <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-muted">{{ doctor.full_name }}</h6>
+                    <div class="btn-group">
+                        <!-- Edit Button (Yellow) -->
+                        <button type="button" class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#editDoctorModal{{ doctor.id }}">edit</button>
+
+                        <!-- Delete Button (Red) -->
+                        <form action="{{ url_for('manage_doctors') }}" method="post" class="d-inline"
+                            onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm me-2">delete</button>
+                        </form>
+
+                        <!-- Blacklist Button (Grey) -->
+                        <form action="{{ url_for('toggle_user_status', user_id=doctor.user_id) }}" method="post"
+                            class="d-inline">
+                            <button type="submit"
+                                class="btn btn-secondary btn-sm {% if not doctor.user.is_active %}active{% endif %}">
+                                {% if doctor.user.is_active %}blacklist{% else %}whitelist{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Doctor Modal (Simplified for visual completeness) -->
+            <div class="modal fade" id="editDoctorModal{{ doctor.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Doctor</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url_for('manage_doctors') }}" method="post">
+                                <input type="hidden" name="action" value="edit">
+                                <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                                <div class="mb-3">
+                                    <label>Full Name</label>
+                                    <input type="text" name="full_name" class="form-control"
+                                        value="{{ doctor.full_name }}" required>
+                                </div>
+                                <!-- Add other fields as necessary or keep it minimal for this task -->
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-muted text-center my-3">No doctors found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Registered Patients -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Registered Patients</h5>
+        </div>
+        <div class="card-body">
+            {% for patient in patients %}
+            <div class="card mb-2 border">
+                <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-muted">{{ patient.full_name }}</h6>
+                    <div class="btn-group">
+                        <!-- Edit Button (Yellow) -->
+                        <button type="button" class="btn btn-outline-warning btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#editPatientModal{{ patient.id }}">edit</button>
+
+                        <!-- Delete Button (Red) - Note: Patient deletion wasn't explicitly in manage_patients but implied by wireframe -->
+                        <!-- Assuming we might need to add delete to manage_patients or just show button for visual match -->
+                        <button type="button" class="btn btn-outline-danger btn-sm me-2" disabled
+                            title="Delete not implemented yet">delete</button>
+
+                        <!-- Blacklist Button (Grey) -->
+                        <form action="{{ url_for('toggle_user_status', user_id=patient.user_id) }}" method="post"
+                            class="d-inline">
+                            <button type="submit"
+                                class="btn btn-secondary btn-sm {% if not patient.user.is_active %}active{% endif %}">
+                                {% if patient.user.is_active %}blacklist{% else %}whitelist{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Patient Modal -->
+            <div class="modal fade" id="editPatientModal{{ patient.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Patient</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url_for('manage_patients') }}" method="post">
+                                <input type="hidden" name="action" value="edit">
+                                <input type="hidden" name="patient_id" value="{{ patient.id }}">
+                                <div class="mb-3">
+                                    <label>Full Name</label>
+                                    <input type="text" name="full_name" class="form-control"
+                                        value="{{ patient.full_name }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-muted text-center my-3">No patients found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <div class="card shadow">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Upcoming Appointments</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Patient Name</th>
+                            <th>Doctor Name</th>
+                            <th>Department</th>
+                            <th>Patient History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in upcoming_appointments %}
+                        <tr>
+                            <td>{{ loop.index }}.</td>
+                            <td>{{ apt.patient.full_name }}</td>
+                            <td>{{ apt.doctor.full_name }}</td>
+                            <td>{{ apt.doctor.department.name }}</td>
+                            <td>
+                                <a href="{{ url_for('patient_history', patient_id=apt.patient_id) }}"
+                                    class="btn btn-outline-primary btn-sm px-4">view</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No upcoming appointments.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

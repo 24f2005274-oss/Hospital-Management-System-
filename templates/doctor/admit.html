@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Admit Patient | Hospital OS{% endblock %}
+
+{% block content %}
+<!-- Aggressive Typography Header -->
+<div class="mb-10 flex justify-between items-end">
+    <div>
+        <h1 class="font-tech text-6xl font-bold italic tracking-tighter text-white drop-shadow-md">
+            PATIENT<span class="text-brand-500">_ADMISSION</span>
+        </h1>
+        <p class="text-brand-400 font-mono text-xs tracking-[0.2em] font-bold mt-2 uppercase">Protocol: Standard Intake Sequence</p>
+    </div>
+    <div class="border border-[#2a2a2a] bg-[#121212] px-4 py-2 rounded-md flex flex-col items-center justify-center">
+        <span class="text-[9px] text-gray-500 tracking-widest uppercase font-bold mb-1">Clearance</span>
+        <span class="text-xs font-mono text-white flex items-center"><i class="ph-fill ph-lock-key-open text-brand-500 mr-2"></i> LEVEL 3 GRANTED</span>
+    </div>
+</div>
+
+<form action="#" method="POST" class="max-w-4xl mx-auto space-y-8 pb-32">
+    
+    <!-- Section 1: Basic Biodata -->
+    <div class="glass-glow rounded-xl p-8 border border-[#2a2a2a]">
+        <h3 class="text-sm font-bold tracking-widest uppercase text-white mb-8 border-l-4 border-brand-500 pl-3 flex items-center">
+            <i class="ph-fill ph-identification-card text-brand-500 mr-2 text-lg"></i> Basic Biodata
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Full Legal Name</label>
+                <input type="text" name="name" required placeholder="Enter patient's full name" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Age</label>
+                    <input type="number" name="age" required placeholder="Years" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-mono text-sm shadow-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Gender</label>
+                    <div class="relative">
+                        <select name="gender" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm cursor-pointer">
+                            <option value="" disabled selected>Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Medical History -->
+    <div class="glass-glow rounded-xl p-8 border border-[#2a2a2a]">
+        <h3 class="text-sm font-bold tracking-widest uppercase text-white mb-8 border-l-4 border-brand-500 pl-3 flex items-center">
+            <i class="ph-fill ph-heartbeat text-brand-500 mr-2 text-lg"></i> Medical History
+        </h3>
+        
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">History of Disease / Presenting Complaints</label>
+                <textarea name="history" rows="4" placeholder="Detail any chronic illnesses, ongoing conditions, or primary reason for current admission..." class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm resize-none"></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Previous Diagnosis</label>
+                    <input type="text" name="previous_diagnosis" placeholder="e.g. Type 2 Diabetes, Hypertension" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Referred By (Optional)</label>
+                    <input type="text" name="referred_by" placeholder="Referring physician or clinic name" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Administrative & Preferences -->
+    <div class="glass-glow rounded-xl p-8 border border-[#2a2a2a]">
+        <h3 class="text-sm font-bold tracking-widest uppercase text-white mb-8 border-l-4 border-brand-500 pl-3 flex items-center">
+            <i class="ph-fill ph-clipboard-text text-brand-500 mr-2 text-lg"></i> Administrative
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Insurance Provider & TPA ID</label>
+                <div class="relative">
+                    <i class="ph ph-shield-check absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" name="insurance" placeholder="e.g. Star Health - ID: SH88291" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-mono text-sm shadow-sm">
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Preferred Doctor / Follow Up</label>
+                <div class="relative">
+                    <i class="ph ph-stethoscope absolute left-4 top-1/2 -translate-y-1/2 text-brand-500"></i>
+                    <select name="preferred_doctor" class="w-full bg-[#121212] border border-[#2a2a2a] rounded-lg pl-11 pr-4 py-3 text-white appearance-none focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-sans text-sm shadow-sm cursor-pointer">
+                        <option value="none">No Preference (Auto-Assign)</option>
+                        <option value="dr_smith">Dr. Sarah Chen (Neurology)</option>
+                        <option value="dr_wolfe">Dr. Marcus Wolfe (Cardiology)</option>
+                        <option value="dr_patel">Dr. Ananya Patel (General Medicine)</option>
+                    </select>
+                    <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Action -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-4">
+        <a href="{{ url_for('clinical.dashboard') }}" class="bg-[#121212] border border-[#2a2a2a] text-gray-400 px-6 py-4 rounded-full font-bold text-sm tracking-widest hover:text-white hover:border-gray-500 transition-all flex items-center cursor-pointer">
+            CANCEL
+        </a>
+        <button type="submit" class="bg-brand-500 text-white px-10 py-4 rounded-full font-bold text-sm tracking-widest shadow-neon-blue hover:scale-105 hover:bg-brand-400 transition-all flex items-center gap-3 cursor-pointer ring-4 ring-[#0a0a0a]">
+            <i class="ph-bold ph-check-circle text-xl"></i> INITIALIZE ADMISSION
+        </button>
+    </div>
+</form>
+
+{% endblock %}

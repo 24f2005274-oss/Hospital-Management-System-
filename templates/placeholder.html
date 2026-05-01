@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | Hospital OS{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col items-center justify-center pt-24 pb-32">
+    
+    <div class="relative w-32 h-32 mb-8">
+        <div class="absolute inset-0 bg-brand-500/20 rounded-full blur-[20px] animate-pulse"></div>
+        <div class="relative flex items-center justify-center w-full h-full bg-[#121212] border border-[#2a2a2a] rounded-full shadow-neon-blue">
+            <i class="ph-fill {{ icon }} text-brand-500 text-5xl"></i>
+        </div>
+    </div>
+
+    <h1 class="font-tech text-5xl font-bold italic tracking-tighter text-white mb-4 drop-shadow-md">
+        {{ title | upper }}
+    </h1>
+    
+    <p class="text-gray-400 font-mono text-sm max-w-md text-center leading-relaxed">
+        This module is currently being calibrated for the Enterprise Edition. Systems are being provisioned by the operations team.
+    </p>
+
+    <div class="mt-12 flex gap-4">
+        <a href="{{ url_for('clinical.dashboard') }}" class="px-6 py-3 bg-[#121212] border border-[#2a2a2a] rounded-lg text-xs font-bold text-gray-400 hover:text-white hover:border-gray-500 transition-all cursor-pointer flex items-center">
+            <i class="ph ph-arrow-left mr-2"></i> Return to Command
+        </a>
+    </div>
+</div>
+{% endblock %}

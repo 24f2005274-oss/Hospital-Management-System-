@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-3"><i class="fas fa-chart-line"></i> Welcome, Dr. {{ doctor.full_name }}</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text mb-0">Today's Appointments</p>
+                        <h3 class="mb-0">{{ today_appointments|length }}</h3>
+                    </div>
+                    <i class="fas fa-calendar fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text mb-0">Upcoming Appointments</p>
+                        <h3 class="mb-0">{{ upcoming_appointments|length }}</h3>
+                    </div>
+                    <i class="fas fa-clock fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('doctor_my_patients') }}" class="text-decoration-none">
+            <div class="card bg-info text-white shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="card-text mb-0">Total Patients</p>
+                            <h3 class="mb-0">{{ total_patients }}</h3>
+                            <small>View Assigned Patients</small>
+                        </div>
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-sun"></i> Today's Appointments</h5>
+            </div>
+            <div class="card-body">
+                {% if today_appointments %}
+                <div class="list-group">
+                    {% for apt in today_appointments %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">{{ apt.patient.full_name }}</h6>
+                                <p class="mb-1 text-muted small">Time: {{ apt.appointment_time.strftime('%H:%M') }}</p>
+                                <p class="mb-0 text-muted small">Symptoms: {{ apt.symptoms[:50] or 'N/A' }}</p>
+                            </div>
+                            {% if apt.status == 'Booked' %}
+                            <a href="{{ url_for('doctor_appointments') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-check"></i> Complete
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No appointments today</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-week"></i> Upcoming Appointments (This Week)</h5>
+            </div>
+            <div class="card-body">
+                {% if upcoming_appointments %}
+                <div class="list-group" style="max-height: 400px; overflow-y: auto;">
+                    {% for apt in upcoming_appointments[:5] %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">{{ apt.patient.full_name }}</h6>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-calendar"></i> {{ apt.appointment_date.strftime('%Y-%m-%d %H:%M')
+                                    }}
+                                </p>
+                            </div>
+                            <span class="badge bg-info">{{ apt.status }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No upcoming appointments</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

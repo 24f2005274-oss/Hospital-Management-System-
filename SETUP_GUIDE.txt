@@ -1,0 +1,367 @@
+# Hospital Management System - Setup & Deployment Guide
+
+## 📋 Table of Contents
+1. Local Setup
+2. Running the Application
+3. GitHub Setup & Push
+4. Project Submission
+5. Video Recording Tips
+
+---
+
+## 1. LOCAL SETUP
+
+### Step 1: Extract and Navigate
+```bash
+# Extract the zip file
+# Navigate to the project folder
+cd Hospital-Management-System
+```
+
+### Step 2: Create Virtual Environment
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4: Run the Application
+```bash
+python app.py
+```
+
+### Step 5: Access the Application
+```
+http://localhost:5000
+```
+
+### Default Admin Login
+- Username: admin
+- Password: admin123
+
+---
+
+## 2. RUNNING THE APPLICATION
+
+### First Time Run
+1. The database will be created automatically
+2. Admin account will be created with default credentials
+3. Sample departments will be added
+
+### Managing Accounts
+
+#### Admin
+- Already created
+- Username: admin
+- Password: admin123
+
+#### Adding Doctors (via Admin Panel)
+1. Login as admin
+2. Go to Manage Doctors
+3. Fill the form and click "Add Doctor"
+4. Doctor can login with provided credentials
+
+#### Patient Registration
+1. Click "Register" on login page
+2. Fill all required fields
+3. Click "Register"
+4. Login with new credentials
+
+---
+
+## 3. GITHUB SETUP & PUSH
+
+### Step 1: Initialize Git Repository
+```bash
+# Navigate to project folder
+cd Hospital-Management-System
+
+# Initialize git
+git init
+
+# Check git status
+git status
+```
+
+### Step 2: Add Files to Git
+```bash
+# Add all files
+git add .
+
+# Check what will be added
+git status
+```
+
+### Step 3: Create First Commit
+```bash
+git commit -m "Initial commit: Hospital Management System"
+```
+
+### Step 4: Create GitHub Repository
+1. Go to https://github.com/new
+2. Enter repository name: `Hospital-Management-System`
+3. Choose "Private" (recommended for assignment)
+4. Click "Create repository"
+
+### Step 5: Add Remote and Push
+```bash
+# Add remote (replace USERNAME with your GitHub username)
+git remote add origin https://github.com/USERNAME/Hospital-Management-System.git
+
+# Rename branch to main if needed
+git branch -M main
+
+# Push to GitHub
+git push -u origin main
+```
+
+### Step 6: Verify Upload
+1. Go to your GitHub repository URL
+2. Refresh the page
+3. You should see all project files
+
+---
+
+## 4. PROJECT SUBMISSION
+
+### Files to Submit
+
+#### 1. Code ZIP File
+```bash
+# Create a zip with only the project folder
+# Structure should be:
+Hospital-Management-System/
+├── app.py
+├── models.py
+├── config.py
+├── requirements.txt
+├── README.md
+├── templates/
+├── static/
+├── instance/ (optional, will be created)
+└── ... (other files)
+```
+
+**NOTE**: There should be NO other folder or file in root except the project folder!
+
+#### 2. Project Report (PDF/DOCX - Max 5 pages)
+
+Include:
+- Student Details (Name, Roll No., Email)
+- Project Statement
+- How You Approached It
+- Technologies Used
+- ER Diagram
+- API Endpoints
+- AI/LLM Usage Declaration
+- GitHub Link
+- Video Link
+
+#### 3. Demo Video (5-10 minutes)
+
+Content:
+- Intro (30 sec)
+- Problem Approach (30 sec)
+- Key Features Demo (90 sec)
+- Additional Features (30 sec)
+
+**How to Record**:
+1. Use OBS Studio (free) or ShareX
+2. Record your screen while demonstrating features
+3. Show your face (optional but recommended)
+4. Explain clearly as you demo
+5. Upload to Google Drive
+6. Get shareable link (anyone with link can view)
+7. Include link in report
+
+---
+
+## 5. VIDEO RECORDING TIPS
+
+### What to Demo
+
+1. **Login/Registration**
+   - Show patient registration
+   - Login as different roles
+
+2. **Admin Features**
+   - Dashboard statistics
+   - Add doctor
+   - Search patients
+   - View appointments
+
+3. **Doctor Features**
+   - View appointments
+   - Set availability
+   - Complete appointment with diagnosis
+   - View patient history
+
+4. **Patient Features**
+   - Browse doctors by department
+   - Book appointment
+   - View appointments
+   - Update profile
+
+5. **Additional Features**
+   - Search functionality
+   - API endpoints (optional)
+   - Responsive design
+
+### Recording Tools
+
+**Free Options**:
+- OBS Studio (https://obsproject.com/)
+- ShareX (https://getsharex.com/)
+- ScreenFlow (macOS)
+- Filmora
+
+### Tips for Good Video
+- Use 1080p or higher resolution
+- Clear and audible audio
+- Good lighting if showing face
+- Smooth navigation
+- Point out key features
+- Show working functionality
+
+---
+
+## 6. MARKING CHECKLIST
+
+Before submission, verify:
+
+### Code Quality
+- ☑ All imports work without errors
+- ☑ Database creates programmatically
+- ☑ No hardcoded paths
+- ☑ Proper error handling
+- ☑ Comments on complex logic
+
+### Functionality
+- ☑ Admin can add/update/delete doctors
+- ☑ Doctor can set availability
+- ☑ Patient can book appointments
+- ☑ Appointments prevent double booking
+- ☑ Treatment records saved
+- ☑ Search features work
+
+### Design
+- ☑ Responsive UI with Bootstrap
+- ☑ Proper navigation
+- ☑ User-friendly interface
+- ☑ Consistent styling
+
+### Documentation
+- ☑ README.md complete
+- ☑ Code is readable
+- ☑ Project report comprehensive
+- ☑ Video demonstrates all features
+
+---
+
+## 7. COMMON ISSUES & SOLUTIONS
+
+### Issue: Python not found
+```bash
+# Check Python installation
+python --version
+# or
+python3 --version
+```
+
+### Issue: pip command not found
+```bash
+# Use python -m pip instead
+python -m pip install -r requirements.txt
+```
+
+### Issue: Port 5000 already in use
+```bash
+# Change port in app.py
+app.run(debug=True, port=5001)
+```
+
+### Issue: Database locked
+```bash
+# Delete instance/hospital.db and restart
+```
+
+### Issue: Git not found
+```bash
+# Download from https://git-scm.com/
+# Restart terminal after installation
+```
+
+### Issue: GitHub push fails
+```bash
+# Configure git first
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+# Then try push again
+git push -u origin main
+```
+
+---
+
+## 8. SUBMISSION CHECKLIST
+
+- ☑ Code works on local machine
+- ☑ Database creates automatically
+- ☑ No database file in submission
+- ☑ All templates present
+- ☑ CSS and JS files included
+- ☑ requirements.txt updated
+- ☑ README.md complete
+- ☑ GitHub repository created
+- ☑ Code pushed to GitHub
+- ☑ Project report created (PDF/DOCX)
+- ☑ Demo video recorded (5-10 min)
+- ☑ Video uploaded to Google Drive
+- ☑ Shareable links obtained
+- ☑ All files compressed in one ZIP
+
+---
+
+## 9. FINAL SUBMISSION STRUCTURE
+
+```
+Your_Submission_Folder/
+├── Hospital-Management-System/  (folder with all code)
+│   ├── app.py
+│   ├── models.py
+│   ├── ... (other files)
+│   └── static/
+├── Project_Report.pdf           (or .docx)
+├── README_SUBMISSION.txt        (with GitHub link & video link)
+└── (NO other files/folders)
+```
+
+**Important**: ZIP only these three items. No individual file zipping.
+
+---
+
+## 10. AFTER VIVA
+
+- Keep GitHub repository updated
+- Maintain code documentation
+- Add any improvements suggested
+- Consider deploying online (Heroku, PythonAnywhere)
+
+---
+
+Need help? Refer to:
+- Flask Documentation: https://flask.palletsprojects.com/
+- SQLAlchemy: https://docs.sqlalchemy.org/
+- Bootstrap: https://getbootstrap.com/
+- Git Guide: https://git-scm.com/doc
+
+Good luck with your project! 🎉
